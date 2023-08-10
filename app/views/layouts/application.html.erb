@@ -8,12 +8,42 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <style>
+      .navbar{
+          background-color: #090909ea !important;
+              }
+      .nav-link{
+          color: white !important;
+             }
+      #logo {
+          float: left;
+          font-size: 1.7em;
+          color: #fff;
+          text-transform: uppercase;
+          letter-spacing: -1px;
+          font-weight: bold;
+              }
+      #home-container{
+          margin-top: 25px;
+          background-color: lightgrey
+        }
+      #page-content{
+        flex: 1 0 auto;
+        background-color: lightgrey;
+      }
+      .jumbotron{
+         background-image: asset-url('image1.jpg');
+         height: 590px;
+      }
+    </style>
   </head>
 
-  <body>
-    <% flash.each do |name,msg| %>
-      <%= msg %>
-    <% end %>
-    <%= yield %>
+  <body >
+    <%= render 'layouts/navigation' %>
+    <div id="page-content">
+        <%= render 'layouts/messages' %>
+        <%= yield %>
+    </div>
+    <%= render 'layouts/footer' %>
   </body>
 </html>
