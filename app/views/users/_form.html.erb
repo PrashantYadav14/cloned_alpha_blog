@@ -1,3 +1,4 @@
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-8">
@@ -27,7 +28,11 @@
             <% end %>
         <div class="row justify-content-center">
             <div class="col-4">
-            <%= link_to '[Cancel and return to article listing]', articles_path(@article), class: "text-dark"%>
+            <% if @flag==1 %>
+                <%= link_to '[Cancel and Return to Home Page]', root_path, class: "text-dark"%>
+            <% else %>
+               <%= link_to '[Cancel and Return to Users Page]', users_path, class: "text-dark"%>
+            <% end %>
             </div>
         </div>
         </div>
