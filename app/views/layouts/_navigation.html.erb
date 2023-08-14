@@ -15,10 +15,32 @@
             Articles
           </a>
           <ul class="dropdown-menu">
-            <%= link_to "Create new article", new_article_path, class: "dropdown-item" %>
+            <% if logged_in? %>
+              <%= link_to "Create new article", new_article_path, class: "dropdown-item" %>
+            <% end %>
             <%= link_to "View article", articles_path, class: "dropdown-item" %>
           </ul>
         </li>
+        <% if logged_in? %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Profile [ <%= current_user.username %> ]
+              </a>
+              <ul class="dropdown-menu">
+                <%= link_to "View your profile", user_path(current_user), class: "dropdown-item" %>
+                <%= link_to "Edit your profile", edit_user_path(current_user), class: "dropdown-item" %>
+                <%= link_to "Delete your profile", user_path(current_user), class: "dropdown-item text-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+              </ul>
+            </li>
+
+          <li class="nav-item">
+              <%= link_to 'Log out', logout_path, class: "nav-link", data: { turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
+          </li>
+        <% else %>
+           <li class="nav-item">
+              <%= link_to 'Log in', login_path, class: "nav-link" %>
+            </li>
+        <% end %>
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
