@@ -15,7 +15,7 @@ class ArticlesController < ApplicationController
     @article.user = current_user
     if @article.save
       flash[:notice] = "Article was created successfully"
-      redirect_to articles_path
+      redirect_to user_path(current_user)
     else
       render 'new', status: :unprocessable_entity
     end
@@ -32,7 +32,7 @@ class ArticlesController < ApplicationController
   end
   def destroy
     @article.destroy
-    redirect_to user_path(current_user)
+    redirect_to articles_path
   end
 end
 
@@ -47,7 +47,7 @@ def article_params
 end
 
 def require_same_user
-  if current_user != @article.user
+  if (current_user != @article.user && !current_user.admin?)
     flash[:alert] = "You can only edit or delete your own article"
     redirect_to @article
   end
