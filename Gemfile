@@ -76,5 +76,7 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot'
+  gem 'rails-controller-testing'
+  gem 'devise'
 end
 
