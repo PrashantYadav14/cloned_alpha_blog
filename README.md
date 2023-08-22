@@ -1,1 +1,1 @@
-this is a alpha-blog
+this is a cloned alpha-blog
