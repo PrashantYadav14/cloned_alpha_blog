@@ -29,7 +29,15 @@ class CategoriesController < ApplicationController
   end
 
   def index
-    @categories = Category.paginate(page: params[:page], per_page: 5)
+     @categories = Category.paginate(page: params[:page], per_page: 5)
+    #  render json: {
+    #   categories: @categories.map { |category| {
+    #     id: category.id,
+    #     name: category.name,
+    #     created_at: category.created_at,
+    #     updated_at: category.updated_at
+    #   } }
+    # }
   end
 
   def show
