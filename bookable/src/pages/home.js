@@ -14,7 +14,7 @@ class Home extends Component {
           <hr />
           <p style={{ textAlign: 'center' }}>Express Your Thoughts Here</p>
         
-          <div class="text-center">
+          <div className="text-center">
               <Button as={Link} to="/signup" variant="primary" style={{ backgroundColor: 'green', color: 'white', fontWeight: 'bold'}} >
             Sign Up
               </Button>

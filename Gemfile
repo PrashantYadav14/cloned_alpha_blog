@@ -8,7 +8,8 @@ gem "rails", "~> 7.0.6"
 
 gem 'rack-cors'
 gem "bootstrap"
-
+gem 'devise'
+gem 'devise_token_auth'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
@@ -77,6 +78,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot'
   gem 'rails-controller-testing'
-  gem 'devise'
 end
 
+
+gem "devise-api", "~> 0.1.3"
