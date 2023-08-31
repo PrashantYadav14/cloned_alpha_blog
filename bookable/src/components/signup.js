@@ -1,169 +1,160 @@
-import React, { Component } from 'react';
-import { useState } from 'react';
-import  axios from 'axios';
-class Signup extends Component {
-  constructor(props)
-  {
-    super(props);
-    this.state = {
-      username : "",
-      email : "",
-      password : ""
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Button, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import './signup.css'; // Create a separate CSS file for styling
+
+function Signup() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (!username || !email || !password) {
+      setError('All fields are required');
+      return;
     }
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleChange = this.handleChange.bind(this);
-  }
-  handleChange(event){
-    this.setState(
-      {
-        [event.target.name]: event.target.value
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/v1/signup', {
+        user: { username, email, password },
+      });
+      if (response.data.message === 'Signed up successfully') {
+        const usersUrl = '/users';
+        navigate(usersUrl);
       }
-    );
-   }
-  handleSubmit(event){
+    } catch (error) {
+      setError('Error signing up');
+    }
+  };
 
-        axios.post("http://localhost:3000/api/v1/signup", {
-          username: this.state.username,
-          email: this.state.email,
-          password: this.state.password
-        }).then(response => {
-          console.log("signup response", response);
-        }).catch(error => {
-          console.log("signup error", error);
-        });
-   event.preventDefault();
-  }
+  const handleCloseAlert = () => {
+    setError('');
+  };
 
-  render() {
-    return (
-      <div>
-        <h1>Sign up for Weblog</h1>
-        <form onSubmit={this.handleSubmit} >
-        <input
-            type="username"
-            name="username"
-            placeholder="Username"
-            value={this.state.username}
-            onChange={this.handleChange}
-            required
-        />
-        <br />
-          <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={this.state.email}
-              onChange={this.handleChange}
-              required
-            
+  return (
+    <div className="signup-page">
+      {error && (
+        <Alert variant="danger" className="mt-3" onClose={handleCloseAlert} dismissible>
+          {error}
+        </Alert>
+      )}
+
+      <Form onSubmit={handleSignup} className="signup-form">
+        <Form.Group className="mb-3" controlId="formBasicUsername">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
-          <br />
-          <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={this.state.password}
-              onChange={this.handleChange}
-              required
-           
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <br />
-          <button type="submit">Sign Up</button>
-        </form>
-      </div>
-    );
-  }
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit" className="signup-button">
+          Sign Up
+        </Button>
+      </Form>
+    </div>
+  );
 }
 
 export default Signup;
 
 
-// import React, { Component } from 'react';
-// import { useState } from 'react';
+
+// import React, { useState } from 'react';
 // import axios from 'axios';
+// import { Button, Form } from 'react-bootstrap';
+// import { useNavigate } from 'react-router-dom';
+// import './signup.css'; // Create a separate CSS file for styling
 
-// class Signup extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       username: "",
-//       email: "",
-//       password: "",
-//       registrationErrors: "",
-//     };
-//     this.handleSubmit = this.handleSubmit.bind(this);
-//     this.handleChange = this.handleChange.bind(this);
-//   }
+// function Signup({  }) {
+//   const [username, setUsername] = useState('');
+//   const [email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [error, setError] = useState('');
+//   const navigate = useNavigate();
 
-//   handleChange(event) {
-//     this.setState({
-//       [event.target.name]: event.target.value,
-//     });
-//   }
-
-//   handleSubmit(event) {
-//     event.preventDefault();
-
-//     const { username, email, password } = this.state;
-
-//     const data = {
-//       username,
-//       email,
-//       password,
-//     };
-
-//     const headers = {
-//       'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-//     };
-
-//     axios.post("http://localhost:3000/api/v1/signup", data, headers)
-//       .then((response) => {
-//         console.log("signup  response", response);
-//       })
-//       .catch((error) => {
-//         console.log("signup error", error);
-//         this.setState({ registrationErrors: error.response.data.errors });
+//   const handleSignup = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await axios.post('http://localhost:3000/api/v1/signup', {
+//         user: { username, email, password },
 //       });
-//   }
+//       if (response.data.message === 'Signed up successfully') {
+//         const usersUrl = "/users";
+//         navigate(usersUrl);
+//       }
+//     } catch (error) {
+//       setError('Error signing up');
+//     }
+//   };
 
-//   render() {
-//     return (
-//       <div>
-//         <h1>Sign up for Weblog</h1>
-//         <form onSubmit={this.handleSubmit}>
-//           <input
-//             type="username"
-//             name="username"
-//             placeholder="Username"
-//             value={this.state.username}
-//             onChange={this.handleChange}
-//             required
-//           />
-//           <br />
-//           <input
-//             type="email"
-//             name="email"
-//             placeholder="Email"
-//             value={this.state.email}
-//             onChange={this.handleChange}
-//             required
-//           />
-//           <br />
-//           <input
-//             type="password"
-//             name="password"
-//             placeholder="Password"
-//             value={this.state.password}
-//             onChange={this.handleChange}
-//             required
-//           />
-//           <br />
-//           <button type="submit">Sign Up</button>
-//         </form>
-//         {this.state.registrationErrors && <div>{this.state.registrationErrors}</div>}
-//       </div>
-//     );
-//   }
+//   return (
+//     <div className="signup-page"> {/* Add a new container */}
+//     <Form onSubmit={handleSignup} className="signup-form">
+//       <Form.Group className="mb-3" controlId="formBasicUsername">
+//         <Form.Label>Username</Form.Label>
+//         <Form.Control
+//           type="text"
+//           placeholder="Enter username"
+//           value={username}
+//           onChange={(e) => setUsername(e.target.value)}
+//         />
+//       </Form.Group>
+
+//       <Form.Group className="mb-3" controlId="formBasicEmail">
+//         <Form.Label>Email address</Form.Label>
+//         <Form.Control
+//           type="email"
+//           placeholder="Enter email"
+//           value={email}
+//           onChange={(e) => setEmail(e.target.value)}
+//         />
+//       </Form.Group>
+
+//       <Form.Group className="mb-3" controlId="formBasicPassword">
+//         <Form.Label>Password</Form.Label>
+//         <Form.Control
+//           type="password"
+//           placeholder="Password"
+//           value={password}
+//           onChange={(e) => setPassword(e.target.value)}
+//         />
+//       </Form.Group>
+
+//       <Button variant="primary" type="submit" className="signup-button">
+//         Sign Up
+//       </Button>
+//     </Form>
+//     </div>
+//   );
 // }
 
 // export default Signup;
+

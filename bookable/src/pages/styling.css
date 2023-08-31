@@ -1,11 +1,120 @@
-.nav-link{
-    color: white !important
+/* Home.css */
+
+.nav-link {
+    color: white !important;
 }
 
 .navbar-brand {
     color: white !important;
     font-weight: bold;
 }
+
 .navbar {
     --bs-navbar-padding-y: 1.0rem !important;
+}
+
+.home-container {
+    background-image: url('/Users/prashantyadav/Desktop/cloned/alpha-blog/app/assets/images/image2.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .content-container {
+    background-color: rgba(255, 255, 255, 0.468); /* Set the background color with alpha value */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    opacity: 7.5;
+  
+  }
+  
+  .home-title {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    animation: fadeInDown 2s ease-in-out; /* Add the animation property */
+  }
+  
+  @keyframes fadeInDown {
+    0% {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .home-subtitle {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .divider {
+    width: 50px;
+    border-top: 2px solid green;
+  }
+  
+  .home-description {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .signup-button {
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .signup-button:hover {
+    background-color: darkgreen;
+  }
+
+  /* ArticleForm.css */
+.article-form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.article-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.article-form input[type="text"],
+.article-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #f8f8f8;
+}
+
+.article-form button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.article-form button[type="submit"]:hover {
+  background-color: #0056b3;
 }

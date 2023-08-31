@@ -1,6 +1,7 @@
 class Api::V1::ArticlesController < ApplicationController
+    before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
+    skip_before_action :verify_authenticity_token
     before_action :set_article, only: [:show, :edit, :update, :destroy]
-
     def index
       @articles = Article.all
       render json: @articles
@@ -11,8 +12,9 @@ class Api::V1::ArticlesController < ApplicationController
     end
   
     def create
-      @article = Article.new(article_params)
-  
+      #@article = current_user.articles.build(article_params)
+      #@article = Article.new(article_params)
+      @article = current_user.articles.new(article_params) 
       if @article.save
         render json: @article, status: :created
       else

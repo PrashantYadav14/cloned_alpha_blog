@@ -1,45 +1,7 @@
-// import React, { Component } from 'react';
-// import axios from 'axios';
 
-// class Users extends Component {
-
-//   state = {
-//     users: []
-//   };
-
-//   componentDidMount() {
-//     axios.get('http://localhost:3000/users.json').then((response) => {
-//       this.setState({
-//         users: response.data.users
-//       });
-//     });
-//   }
-
-//   render() {
-//     const { users } = this.state;
-//     return (
-//       <div className='container'>
-//         <h1 style={{ textAlign: "center" }}>Listing all Users</h1>
-//             {
-//               users.map((user) => {
-//                 return (
-//                   <ul>
-//                     <div key={user.id}>
-//                         <li> <h3 style={{color: 'green'}}>{user.username}</h3> </li>
-//                         <li> <h3 style={{color: 'green'}}>{user.email}</h3> </li>
-//                         <hr />
-//                     </div>
-//                   </ul>);
-//               })
-//             }
-//       </div>
-//     );
-//   }
-// }
-// export default Users;
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Container, Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Container, Navbar, Nav, NavItem, Card} from 'react-bootstrap';
 
 class Users extends Component {
 
@@ -48,7 +10,7 @@ class Users extends Component {
   };
 
   componentDidMount() {
-    axios.get('http://localhost:3000/users.json').then((response) => {
+    axios.get("http://localhost:3000/api/v1/users").then((response) => {
       this.setState({
         users: response.data
       });
@@ -56,29 +18,33 @@ class Users extends Component {
   }
 
   render() {
-    const { users, } = this.state;
+    const { users } = this.state;
     return (
       <Container>
-       <Navbar style={{ textAlign: 'center' }}>
-          <h1>Alpha Blog Users</h1>
+         <Navbar bg="dark" variant="dark" style={{ marginTop: '20px'}}>
+          <Navbar.Brand className="mx-auto " >Alpha Blog Users </Navbar.Brand>
         </Navbar>
-        <Nav>
+        <div>
           {users.map((user, index) => (
-            <NavItem key={index}>
-              <h4 style={{ color: 'green' , textAlign: 'center'}}>{user.username}</h4>
-              <p style={{ color: 'green', textAlign: 'center' }}>{user.email}</p>
-              <h2 style={{ color: 'green' , textAlign: 'center'}} >Articles</h2>
-      
-              {user.articles.map((article, index) => (
-                  <article key={index}>
-                    <h3 style={{ color: 'green', textAlign: 'center' }}>{article.title}</h3>
-                    <p style={{ color: 'green', textAlign: 'center' }}>{article.description}</p>
+            <Card key={index} className="my-4 p-3 border" style={{ backgroundColor: '#f8f9fa' }}>
+              <Card.Body>
+                <Card.Title className="mb-3" style={{ color: '#17a2b8', textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>{user.username}</Card.Title>
+                <Card.Text className="mb-3" style={{ color: '#343a40', textAlign: 'center', fontSize: '1rem' }}>{user.email}</Card.Text>
+                <Card.Title className="mb-4" style={{ color: '#17a2b8', textAlign: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>Articles</Card.Title>
+
+                {user.articles.map((article, index) => (
+                  <article key={index} className="mb-3">
+                    <Card.Title style={{ color: '#17a2b8', textAlign: 'center', fontSize: '1.2rem' }}>{article.title}</Card.Title>
+                    <Card.Text style={{ color: '#343a40', textAlign: 'center' }}>{article.description}</Card.Text>
                   </article>
                 ))}
-              < hr/>
-            </NavItem>
+
+                <hr />
+              </Card.Body>
+            </Card>
           ))}
-        </Nav>
+        </div>
+
       </Container>
     );
   }
