@@ -5,12 +5,14 @@ import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import './signup.css';
+import { useAuth } from "./AuthContext"; 
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false); // New state variable
   const navigate = useNavigate();
+  const { login } = useAuth(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,6 +21,7 @@ function Login() {
         user: { email, password }
       });
       if (response.data.message === 'Logged in successfully') {
+        login(response.data.user);
         const userId = response.data.user.id;
         const profileUrl = `/users/${userId}`;
         navigate(profileUrl);

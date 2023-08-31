@@ -4,6 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import './signup.css'; // Create a separate CSS file for styling
+import { useAuth } from './AuthContext';
 
 function Signup() {
   const [username, setUsername] = useState('');
@@ -11,6 +12,7 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -24,6 +26,8 @@ function Signup() {
         user: { username, email, password },
       });
       if (response.data.message === 'Signed up successfully') {
+        const { token, user } = response.data; // Assuming your API returns user details
+        login({ token, ...user }); // Use the login function from context
         const usersUrl = '/users';
         navigate(usersUrl);
       }

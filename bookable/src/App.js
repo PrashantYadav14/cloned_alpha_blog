@@ -13,7 +13,8 @@ import Login from "./components/login";
 import Signup from "./components/signup";
 import UserProfile from "./pages/userprofile";
 import CategoryProfile from  "./pages/categoryprofile";
-import NewArticleForm from "./pages/newarticleform"
+import NewArticleForm from "./pages/newarticleform";
+import NewCategoryForm from "./pages/newcategoryform";
 class App extends Component {
   render() {
     return (
@@ -28,8 +29,8 @@ class App extends Component {
           <Route path="/articles"  Component={Articles} />
           <Route path="/categories" Component={Categories} />
           <Route path="/categories/:id" Component={CategoryProfile} />
-          <Route path="/articles/new"    Component={NewArticleForm} />
-          
+          <Route path="/articles/new"  Component={NewArticleForm} />
+          <Route path="/categories/new" Component={NewCategoryForm} />
         </Routes>
       </BrowserRouter>
     );
