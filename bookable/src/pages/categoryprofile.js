@@ -1,52 +1,81 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { Container, Card, ListGroup, Spinner, Alert, Button } from 'react-bootstrap';
+
+const linkStyle = {
+  textDecoration: 'underline',
+  color: '#2ecc71',
+};
 
 function CategoryProfile() {
   const { id } = useParams();
   const [categoryData, setCategoryData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch category data using the id parameter
-    axios.get(`http://localhost:3000/api/v1/categories/${id}`) // Corrected URL
-      .then(response => {
-        setCategoryData(response.data); // Corrected variable name
+    axios
+      .get(`http://localhost:3000/api/v1/categories/${id}`)
+      .then((response) => {
+        setCategoryData(response.data);
+        setIsLoading(false);
       })
-      .catch(error => {
-        console.error(error);
+      .catch((error) => {
+        setError(error);
+        setIsLoading(false);
       });
   }, [id]);
-  return (
-    <div className="container mt-5">
-    <div className="card border-info">
-      <div className="card-header bg-info text-white">
-        <h2 className="mb-0 text-center">Category Profile</h2>
-      </div>
-      <div className="card-body text-center"> {/* Center content */}
-        {categoryData ? (
-          <>
-            <p className="mb-2">
-              <strong>
-                <span style={{ color: '#3498db', fontWeight: 'bold', fontSize: '24px' }}>{categoryData.category.name}</span>
-              </strong>
-            </p>
-            <h3>Articles associated with this category:</h3>
-            <ul className="list-group mt-3">
-              {categoryData.articles.map(article => (
-                <li key={article.id} className="list-group-item">
-                  {article.title}
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <div className="alert alert-danger mt-3">Category Data not found</div>
-        )}
-      </div>
-    </div>
-  </div>
 
+  return (
+    <div className="user-profile-bg">
+      <Container className="mt-5 user-profile-container">
+        <h2 className="mb-4 text-center text-primary">Category Profile</h2>
+        <Card className="mb-4 border border-info">
+          <Card.Body className="text-center">
+            {isLoading ? (
+              <Spinner animation="border" variant="info" />
+            ) : error ? (
+              <Alert variant="danger" className="mt-3">
+                Category Data not found
+              </Alert>
+            ) : (
+              categoryData && (
+                <>
+                  <p className="mb-2">
+                    <strong>
+                      <span className="category-name" style={{ color: '#1e6e9b', fontSize: '24px' }}>
+                        {categoryData.category.name}
+                      </span>
+                    </strong>
+                  </p>
+                </>
+              )
+            )}
+          </Card.Body>
+        </Card>
+        {categoryData && categoryData.articles && categoryData.articles.length > 0 && (
+          <Card className="mb-4 border border-success">
+            <Card.Body className="text-center">
+              <h3 style={{ color: '#4a90e2' }}>Articles</h3>
+              <ListGroup className="mt-3">
+                {categoryData.articles.map((article, index) => (
+                  <div key={article.id} className="mb-3">
+                    <h5 className="text-article-title">{article.title}</h5>
+                    <Link to={`/articles/${article.id}`} style={linkStyle}>
+                      <Button variant="success">View</Button>
+                    </Link>
+                  </div>
+                ))}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+        )}
+      </Container>
+    </div>
   );
 }
 
 export default CategoryProfile;
+
+

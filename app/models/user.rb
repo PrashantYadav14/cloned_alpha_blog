@@ -1,7 +1,6 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-
   before_save { self.email = email.downcase }
   has_many :articles, dependent: :destroy
   validates :username, presence: true, uniqueness: true, length: {minimum: 3, maximum: 25}

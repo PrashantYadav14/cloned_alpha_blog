@@ -1,3 +1,4 @@
+
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
   protect_from_forgery with: :exception
@@ -10,7 +11,6 @@ class ApplicationController < ActionController::Base
   def logged_in?
     !!current_user
   end
-
   def require_user
     if !logged_in?
       flash[:alert] = "You must be logged in to perform this action"

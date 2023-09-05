@@ -1,56 +1,76 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navbar, Nav, NavDropdown, NavItem } from 'react-bootstrap';
-import './signup.css'; // Import your custom CSS file for styling
-import { useAuth } from './AuthContext'; // Import the useAuth hook
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './signup.css';
 
 function Navigation() {
-  const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem('token');
 
   const handleLogout = () => {
-    logout();
-    navigate('/'); // Redirect to home page
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
   };
 
   return (
     <Navbar expand="lg" className="custom-navbar">
-      <Navbar.Brand as={Link} to="/" className="brand" style={{ marginLeft: '20px', fontWeight: 'bold' }}>WeBlog</Navbar.Brand>
+      <Navbar.Brand as={Link} to="/" className="brand" style={{ marginLeft: '20px', fontWeight: 'bold' }}>
+        WeBlog
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarScroll" />
       <Navbar.Collapse id="navbarScroll">
         <Nav className="ml-auto" navbarScroll>
-          <Nav.Link as={Link} to="/users" className="nav-link">Bloggers</Nav.Link>
+          <Nav.Link as={Link} to="/users" className="nav-link">
+            Bloggers
+          </Nav.Link>
 
           <NavDropdown title="Articles" id="navbarScrollingDropdown" className="nav-dropdown">
-            <NavDropdown.Item as={Link} to="/articles/new" className="dropdown-item">Create new article</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/articles" className="dropdown-item">View Article</NavDropdown.Item>
+            {token && (
+              <NavDropdown.Item as={Link} to="/articles/new" className="dropdown-item create-article-link">
+                <span className="create-icon"></span> Create new article
+              </NavDropdown.Item>
+            )}
+            <NavDropdown.Item as={Link} to="/articles" className="dropdown-item">
+              View Article
+            </NavDropdown.Item>
           </NavDropdown>
 
           <NavDropdown title="Categories" id="navbarScrollingDropdown" className="nav-dropdown">
-            <NavDropdown.Item as={Link} to="/categories/new" className="dropdown-item">Create new categories</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/categories" className="dropdown-item">View category</NavDropdown.Item>
+            {token && user && user.admin && (
+              <NavDropdown.Item as={Link} to="/categories/new" className="dropdown-item create-category-link">
+                <span className="create-icon"></span> Create new categories
+              </NavDropdown.Item>
+            )}
+            <NavDropdown.Item as={Link} to="/categories" className="dropdown-item">
+              View category
+            </NavDropdown.Item>
           </NavDropdown>
 
-          {/* Conditional rendering based on user login state */}
-          {user ? (
+          {token ? (
             <>
               <Nav.Link as={Link} to={`/users/${user.id}`} className="nav-link">
                 {user.username}'s Profile
               </Nav.Link>
-              {user.admin && ( // Check if the user is an admin
-                <Nav.Link>
-                  (Admin)
-                </Nav.Link>
+              {user.admin && (
+                <Nav.Link>(Admin)</Nav.Link>
               )}
-              <Nav.Link onClick={handleLogout} className="nav-link">
-                Log Out
-              </Nav.Link>
             </>
-          ) : (
+          ) : null}
+
+          {token ? null : (
             <Nav.Link as={Link} to="/login" className="nav-link">
               Log in
             </Nav.Link>
           )}
+
+          {token ? (
+            <Nav.Link onClick={handleLogout} className="nav-link">
+              Log Out
+            </Nav.Link>
+          ) : null}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
@@ -59,127 +79,7 @@ function Navigation() {
 
 export default Navigation;
 
-// import React from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-// import './signup.css'; // Import your custom CSS file for styling
-// import { useAuth } from "./AuthContext"; // Import the useAuth hook
-// function Navigation() {
-//   const { user, logout } = useAuth(); // Use the useAuth hook to access user and logout
-//   const navigate = useNavigate(); // Initialize useNavigate
-
-//   const handleLogout = () => {
-//     logout();
-//     navigate('/'); // Redirect to home page
-//   };
-
-//   return (
-//     <Navbar expand="lg" className="custom-navbar">
-//       <Navbar.Brand as={Link} to="/" className="brand" style={{ marginLeft: '20px', fontWeight: 'bold' }}>WeBlog</Navbar.Brand>
-//       <Navbar.Toggle aria-controls="navbarScroll" />
-//       <Navbar.Collapse id="navbarScroll">
-//         <Nav className="ml-auto" navbarScroll>
-//           <Nav.Link as={Link} to="/users" className="nav-link">Bloggers</Nav.Link>
-
-//           <NavDropdown title="Articles" id="navbarScrollingDropdown" className="nav-dropdown">
-//             <NavDropdown.Item as={Link} to="/articles/new" className="dropdown-item">Create new article</NavDropdown.Item>
-//             <NavDropdown.Item as={Link} to="/articles" className="dropdown-item">View Article</NavDropdown.Item>
-//           </NavDropdown>
-
-//           <NavDropdown title="Categories" id="navbarScrollingDropdown" className="nav-dropdown">
-//             <NavDropdown.Item as={Link} to="/categories/new" className="dropdown-item">Create new categories</NavDropdown.Item>
-//             <NavDropdown.Item as={Link} to="/categories" className="dropdown-item">View category</NavDropdown.Item>
-//           </NavDropdown>
-
-//           {/* Conditional rendering based on user login state */}
-//           {user ? (
-//             <>
-//               <Nav.Link as={Link} to={`/users/${user.id}`} className="nav-link">({user.username}'s Profile)</Nav.Link>
-//               <Nav.Link onClick={handleLogout} className="nav-link">Log Out</Nav.Link>
-//             </>
-//           ) : (
-//             <Nav.Link as={Link} to="/login" className="nav-link">Log in</Nav.Link>
-//           )}
-//         </Nav>
-//       </Navbar.Collapse>
-//     </Navbar>
-//   );
-// }
-
-// export default Navigation;
 
 
-// import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
-// import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-// import './signup.css'; // Import your custom CSS file for styling
-// import { useAuth } from './context/AuthContext'; 
-// class Navigation extends Component {
-//   render() {
-//     return (
-//       <Navbar expand="lg" className="custom-navbar">
-//         <Navbar.Brand as={Link} to="/" className="brand" style={{ marginLeft: '20px', fontWeight: 'bold' }}>WeBlog</Navbar.Brand>
-//         <Navbar.Toggle aria-controls="navbarScroll" />
-//         <Navbar.Collapse id="navbarScroll">
-//           <Nav className="ml-auto" navbarScroll>
-//             <Nav.Link as={Link} to="/users" className="nav-link">Bloggers</Nav.Link>
 
-//             <NavDropdown title="Articles" id="navbarScrollingDropdown" className="nav-dropdown">
-//               <NavDropdown.Item as={Link} to="/articles/new" className="dropdown-item">Create new article</NavDropdown.Item>
-//               <NavDropdown.Item as={Link} to="/articles" className="dropdown-item">View Article</NavDropdown.Item>
-//             </NavDropdown>
 
-//             <NavDropdown title="Categories" id="navbarScrollingDropdown" className="nav-dropdown">
-//               <NavDropdown.Item as={Link} to="/categories/new" className="dropdown-item">Create new categories</NavDropdown.Item>
-//               <NavDropdown.Item as={Link} to="/categories" className="dropdown-item">View category</NavDropdown.Item>
-//             </NavDropdown>
-
-//             <Nav.Link as={Link} to="/login" className="nav-link">Log in</Nav.Link>
-//           </Nav>
-//         </Navbar.Collapse>
-//       </Navbar>
-//     );
-//   }
-// }
-
-// export default Navigation;
-
-// import React, { Component } from 'react';
-// import axios from 'axios';
-// import {Link} from 'react-router-dom';
-// import { Button, Container, Form, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-
-// class Navigation extends Component {
-//      render (){
-//         return (
-//             <Navbar expand="lg" className="bg-black" >
-//           <Container fluid>
-//             <Navbar.Brand as={Link} to="/">WeBlog</Navbar.Brand>
-//             <Navbar.Toggle aria-controls="navbarScroll" />
-//             <Navbar.Collapse id="navbarScroll">
-//               <Nav
-//                 className="me-auto my-2 my-lg-0"
-//                 style={{ maxHeight: '100px' }}
-//                 navbarScroll
-//               >
-//                   <Nav.Link as={Link} to="/users" style={{ color: "black" }}>Bloggers</Nav.Link>
-            
-//                 <NavDropdown title="Articles" id="navbarScrollingDropdown" style={{ color: 'white' }}> 
-//                   <NavDropdown.Item href="#action3" >Create new article</NavDropdown.Item>
-//                   <NavDropdown.Item  as={Link} to="/articles"  >View Article</NavDropdown.Item>
-//                 </NavDropdown>
-
-//                 <NavDropdown title="Categories" id="navbarScrollingDropdown">
-//                   <NavDropdown.Item href="#action3">Create new categories</NavDropdown.Item>
-//                   <NavDropdown.Item as={Link} to="/categories">View category</NavDropdown.Item>
-    
-//                 </NavDropdown>
-//                 <Nav.Link as={Link} to="/login" style={{ color: "black" }}>Log in</Nav.Link>
-//               </Nav>
-//             </Navbar.Collapse>
-//           </Container>
-//          </Navbar>
-//         );
-//      }
-// }
-// export default Navigation;

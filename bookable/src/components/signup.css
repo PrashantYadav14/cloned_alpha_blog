@@ -37,13 +37,7 @@
     padding: 10px 0;
   }
   
-  .brand {
-    font-size: 24px;
-    color: white;
-    text-decoration: none;
-    margin-right: 20px;
-  }
-  
+
   .nav-link{
     color: white !important;
     text-decoration: none !important;
@@ -57,9 +51,11 @@
     transition: background-color 0.3s ease-in-out;
   }
   
-  .nav-link:hover,
+  .nav-link:hover{
+    background-color: #044004;
+  }
   .dropdown-item:hover {
-    background-color: #555;
+    background-color: #cac7c7;
   }
   
   .nav-dropdown {
@@ -67,7 +63,7 @@
   }
   
   .nav-dropdown .dropdown-item {
-    width: 200px; /* Adjust the width as needed */
+    width: 200px;
   }
   
   .nav-dropdown .dropdown-menu {
@@ -86,15 +82,26 @@
   z-index: 1;
   border-radius: 0;
   text-align: center;
-  opacity: 1; /* Initially set the opacity to 1 */
-  transition: opacity 0.3s ease; /* Add a transition for smooth appearance */
+  opacity: 1; 
+  transition: opacity 0.3s ease; 
 }
 
 .alert.hidden {
-  opacity: 0; /* When hidden, set opacity to 0 */
-  pointer-events: none; /* Disable interaction when hidden */
+  opacity: 0; 
+  pointer-events: none; 
 }
 
 .signup-page:hover .alert {
-  top: 0; /* Show the alert on hover */
+  top: 0;
+}
+
+.footer{
+  margin-top: 1rem;
+  padding: 0.5rem;
+  color: white;
+  background-color: rgb(8, 8, 8);
+  position: fixed; 
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }

@@ -1,30 +1,38 @@
 class Api::V1::CategoriesController < ApplicationController
-    before_action :require_admin, except: [:index, :show]
+    skip_before_action :verify_authenticity_token
+    before_action :authenticate_user_with_jwt!, only: [:create, :update]
+    JWT_SECRET_KEY = '6B#Q&g8j$PzE5n@2mG*pW9sZrVw1yT7xU4'
+
     def new
       @category = Category.new
     end
-    
+
     def create
       @category = Category.new(category_params)
-      if @category.save
-        render json: @category, status: :created
+      if @current_user.admin?
+        if @category.save
+          render json: { message: 'Category created successfully', category: @category }, status: :created
+        else
+          render json: @category.errors, status: :unprocessable_entity
+        end
       else
-        render json: @category.errors, status: :unprocessable_entity
+        render json: { error: 'You do not have permission to create a category' }, status: :forbidden
       end
     end
-  
-    def edit
-      @category = Category.find(params[:id])
-    end
-  
+
     def update
       @category = Category.find(params[:id])
-      if @category.update(category_params)
-        render json: @category, status: :ok
+      if @current_user.admin?
+        if @category.update(category_params)
+          render json: @category, status: :ok
+        else
+          render json: @category.errors, status: :unprocessable_entity
+        end
       else
-        render json: @category.errors, status: :unprocessable_entity
+        render json: { error: 'You do not have permission to update this category' }, status: :forbidden
       end
     end
+
   
     def index
         @categories = Category.all
@@ -41,15 +49,24 @@ class Api::V1::CategoriesController < ApplicationController
     end
   
     private
+     
+    def authenticate_user_with_jwt!
+      token = request.headers['Authorization']&.split(' ')&.last
+      begin
+        decoded_token = JWT.decode(token, JWT_SECRET_KEY, true, algorithm: 'HS256')
+        user_id = decoded_token[0]['user_id']
+        @current_user = User.find(user_id)
+      rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+        render_unauthorized
+      end
+    end
   
+    def render_unauthorized
+      render json: { error: 'Unauthorized' }, status: :unauthorized
+    end
+
     def category_params
       params.require(:category).permit(:name)
     end
   
-    def require_admin
-      if !(logged_in? && current_user.admin?)
-        flash[:alert] = "Only admins can perform this action"
-        redirect_to categories_path
-      end
-    end
   end

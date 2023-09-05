@@ -1,0 +1,37 @@
+.user-profile-bg {
+    background-image: url('/Users/prashantyadav/Desktop/cloned/alpha-blog/app/assets/images/background1.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .user-profile-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center; 
+  }
+  
+  .text-primary {
+    color: #3498db;
+  }
+  
+  .text-success {
+    color: #4caf50;
+  }
+  
+  .text-article-title {
+    color: #e74c3c; 
+  }
+  
+  .text-info {
+    color: #3498db;
+  }
+  
+  .text-secondary {
+    color: #555;
+  }
+  

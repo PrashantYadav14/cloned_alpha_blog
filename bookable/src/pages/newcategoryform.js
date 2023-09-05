@@ -1,55 +1,77 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './styling.css';
+import { Form, Button, FormGroup, FormLabel, FormControl, Alert, CloseButton } from 'react-bootstrap';
+import './styling.css'; // Import your updated CSS file
+import { useNavigate } from 'react-router-dom';
 
-const NewCategoryForm = () => {
-  const [categoryName, setCategoryName] = useState('');
+function NewCategoryForm() {
+  const [name, setCategoryName] = useState('');
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
-  const handleInputChange = (event) => {
-    const { value } = event.target;
-    setCategoryName(value);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleCreateCategory = async () => {
     try {
-      const authToken = 'your-auth-token'; // Replace with the actual authentication token
-      const response = await axios.post('http://localhost:3000/api/v1/categories', {
-        name: categoryName
-      }, {
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const token = localStorage.getItem('token');
+      const userString = localStorage.getItem('user');
+      const user = JSON.parse(userString);
 
-      // Handle successful response here (e.g., show a success message)
-      console.log('Category created:', response.data);
+      if (user.admin) {
+        const response = await axios.post(
+          'http://localhost:3000/api/v1/categories',
+          {
+            name: name,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.message === 'Category created successfully') {
+          navigate('/categories');
+        } else {
+          setError('Error creating the category. Please try again.');
+        }
+      } else {
+        setError('You do not have permission to create categories.');
+      }
     } catch (error) {
-      // Handle error here (e.g., show an error message)
-      console.error('Error creating category:', error.message);
+      setError('Error creating the category. Please try again.');
     }
   };
 
+  const dismissError = () => {
+    setError(null);
+  };
+
   return (
-    <div className="article-form">
+    <div className="article-form"> {/* Apply the article-form class */}
       <h2>Create a New Category</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Name:</label>
-        <input
-          type="text"
-          className="form-input"
-          value={categoryName}
-          onChange={handleInputChange}
-          required
-        />
-        <button type="submit" className="form-button">
+      {error && (
+        <Alert variant="danger" className="d-flex justify-content-between align-items-center">
+          <div>{error}</div>
+          <CloseButton onClick={dismissError} />
+        </Alert>
+      )}
+      <Form>
+        <FormGroup controlId="categoryName">
+          <FormLabel>Category Name</FormLabel>
+          <FormControl
+            type="text"
+            placeholder="Enter the category name"
+            value={name}
+            onChange={(e) => setCategoryName(e.target.value)}
+          />
+        </FormGroup>
+        <Button style={{ marginTop: '10px' }} variant="primary" onClick={handleCreateCategory}>
           Create Category
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
-};
+}
 
 export default NewCategoryForm;
+
+

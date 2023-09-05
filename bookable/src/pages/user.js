@@ -1,55 +1,130 @@
-
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Navbar, Nav, NavItem, Card} from 'react-bootstrap';
+import { Container, Navbar, Card, Button, Modal } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 
-class Users extends Component {
+function Users() {
+  const [users, setUsers] = useState([]);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const navigate = useNavigate();
 
-  state = {
-    users: []
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = () => {
+    axios.get("http://localhost:3000/api/v1/users").then((response) => {
+      setUsers(response.data);
+    });
   };
 
-  componentDidMount() {
-    axios.get("http://localhost:3000/api/v1/users").then((response) => {
-      this.setState({
-        users: response.data
+  const handleDeleteClick = (user) => {
+    
+    setShowConfirmationModal(true);
+    setUserToDelete(user);
+  };
+
+  const confirmDelete = () => {
+   
+    const DELETE_USER_URL = `http://localhost:3000/api/v1/users/${userToDelete.id}`;
+    const token = localStorage.getItem('token');
+
+    axios
+      .delete(DELETE_USER_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userToDelete.id));
+        setShowConfirmationModal(false);
+        setUserToDelete(null);
+        
+        if (userToDelete.id !== storedUser.id && storedUser.admin) {
+           navigate('/users');
+        } else {
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+          navigate('/');
+        }
+        
+      })
+      .catch((error) => {
+        console.error('Error deleting user:', error);
+        
       });
-    });
-  }
+  };
 
-  render() {
-    const { users } = this.state;
-    return (
-      <Container>
-         <Navbar bg="dark" variant="dark" style={{ marginTop: '20px'}}>
-          <Navbar.Brand className="mx-auto " >Alpha Blog Users </Navbar.Brand>
-        </Navbar>
-        <div>
-          {users.map((user, index) => (
-            <Card key={index} className="my-4 p-3 border" style={{ backgroundColor: '#f8f9fa' }}>
-              <Card.Body>
-                <Card.Title className="mb-3" style={{ color: '#17a2b8', textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>{user.username}</Card.Title>
-                <Card.Text className="mb-3" style={{ color: '#343a40', textAlign: 'center', fontSize: '1rem' }}>{user.email}</Card.Text>
-                <Card.Title className="mb-4" style={{ color: '#17a2b8', textAlign: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>Articles</Card.Title>
+  const cancelDelete = () => {
+    
+    setShowConfirmationModal(false);
+    setUserToDelete(null);
+  };
 
-                {user.articles.map((article, index) => (
-                  <article key={index} className="mb-3">
-                    <Card.Title style={{ color: '#17a2b8', textAlign: 'center', fontSize: '1.2rem' }}>{article.title}</Card.Title>
-                    <Card.Text style={{ color: '#343a40', textAlign: 'center' }}>{article.description}</Card.Text>
-                  </article>
-                ))}
+  const storedUser = JSON.parse(localStorage.getItem('user'));
 
-                <hr />
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
+  return (
+    <Container style={{ backgroundColor: '#f8f9fa', paddingTop: '20px' }}>
+      <Navbar bg="dark" variant="dark" style={{ marginBottom: '20px' }}>
+        <Navbar.Brand className="mx-auto" style={{ color: '#17a2b8', fontSize: '1.5rem', fontWeight: 'bold' }}>
+          Alpha Blog Users
+        </Navbar.Brand>
+      </Navbar>
+      <div className="mt-4">
+        {users && users.map((user) => (
+          <Card key={user.id} className="mb-4 p-3 border" style={{ backgroundColor: '#f8f9fa' }}>
+            <Card.Body>
+              <Card.Title className="mb-3" style={{ color: 'green', textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                {user.username}
+              </Card.Title>
+              <Card.Text className="mb-3" style={{ color: '#343a40', textAlign: 'center', fontSize: '1rem' }}>
+                {user.email}
+              </Card.Text>
+              <div className="d-flex justify-content-center">
+                <Link to={`/users/${user.id}`}>
+                  <Button variant="success" className="mx-2">View</Button>
+                </Link>
+                {(storedUser && user.id === storedUser.id) ? (
+                  <Link to={`/users/${user.id}/edit`}>
+                    <Button variant="primary" className="mx-2">Edit</Button>
+                  </Link>
+                ) : null}
+                {(storedUser && (user.id === storedUser.id || storedUser.admin)) ? (
+                  <Button variant="danger" className="mx-2" onClick={() => handleDeleteClick(user)}>Delete</Button>
+                ) : null}
+              </div>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
 
-      </Container>
-    );
-  }
-
+      
+      <Modal show={showConfirmationModal} onHide={cancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this user and all associated articles?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
+  );
 }
 
 export default Users;
+
+
+
+
+
+
+
 

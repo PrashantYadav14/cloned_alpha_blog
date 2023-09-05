@@ -25,7 +25,7 @@
   }
   
   .content-container {
-    background-color: rgba(255, 255, 255, 0.468); /* Set the background color with alpha value */
+    background-color: rgba(255, 255, 255, 0.468); 
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -36,7 +36,7 @@
   .home-title {
     font-size: 4rem;
     margin-bottom: 10px;
-    animation: fadeInDown 2s ease-in-out; /* Add the animation property */
+    animation: fadeInDown 2s ease-in-out; 
   }
   
   @keyframes fadeInDown {
@@ -80,14 +80,16 @@
   }
 
   /* ArticleForm.css */
+  
 .article-form {
+
   max-width: 400px;
   margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
 .article-form label {
@@ -117,4 +119,10 @@
 
 .article-form button[type="submit"]:hover {
   background-color: #0056b3;
+}
+body {
+  background-image: url('/Users/prashantyadav/Desktop/cloned/alpha-blog/app/assets/images/background1.jpg'); /* Replace 'path-to-your-background-image.jpg' with the actual path to your image */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; 
 }

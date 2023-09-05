@@ -158,7 +158,9 @@ Devise.setup do |config|
   # db field (see migrations). Until confirmed, new email is stored in
   # unconfirmed_email column, and copied to email column on successful confirmation.
   config.reconfirmable = true
-
+  
+  config.authentication_keys = [:email] # Make sure email or username is used as the authentication key
+ 
   # Defines which key will be used when confirming an account
   # config.confirmation_keys = [:email]
 
@@ -304,10 +306,11 @@ Devise.setup do |config|
   # Note: These might become the new default in future versions of Devise.
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
-
+  
   # ==> Configuration for :registerable
 
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+  
 end
