@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LikesComponent from './likescomponent'; 
 import CommentsComponent from './commentscomponent';
-import { Container, Navbar, Card, Spinner, Alert, Row, Col } from 'react-bootstrap';
+import { Container, Navbar, Card, Spinner, Alert, Row, Col, Collapse } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import './articleprofile.css';
 
 function ArticleProfile() {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
+
   useEffect(() => {
     const API_URL = `http://localhost:3000/api/v1/articles/${id}`;
 
@@ -22,6 +26,16 @@ function ArticleProfile() {
       .catch(error => {
         console.error(error);
         setLoading(false); 
+      });
+
+    const COMMENTS_URL = `http://localhost:3000/api/v1/articles/${id}/comments`;
+    axios
+      .get(COMMENTS_URL)
+      .then(response => {
+        setComments(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching comments:', error);
       });
   }, [id]);
 
@@ -44,19 +58,42 @@ function ArticleProfile() {
               {article.description}
             </Card.Text>
             {token && ( 
-              <Container className="d-flex justify-content-center"> 
-                <Col>
-                  <Row className="justify-content-center mb-4"> 
-             
-                    <LikesComponent article_id={id} />
-                  </Row>
-                  <Row className="justify-content-center mb-4">
-                    <CommentsComponent article_id={id} />
-                  </Row>
-                </Col>
+              <Container className="d-flex flex-column align-items-center"> 
+                <Row className="mb-4"> 
+                  <LikesComponent article_id={id} />
+                </Row>
+                <Row className="mb-4">
+                  <CommentsComponent article_id={id} />
+                </Row>
+                <Row className="mb-4">
+                  <button
+                    className="view-all-comments"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowComments(!showComments);
+                    }}
+                  >
+                    View All Comments
+                  </button>
+                  <Collapse in={showComments}>
+                    <div className="w-100">
+                    {comments.length > 0 ? (
+                      comments.map(comment => (
+                        <Card key={comment.id} className="comment-card">
+                          <Card.Body>
+                            <div className="comment-content">{comment.content}</div>
+                            <div className="comment-user">User: {comment.user.username}</div>
+                          </Card.Body>
+                        </Card>
+                      ))
+                    ) : (
+                      <div className="text-center">No comments yet</div>
+                    )}
+                    </div>
+                  </Collapse>
+                </Row>
               </Container>
             )}
-
           </Card.Body>
         </Card>
       ) : (

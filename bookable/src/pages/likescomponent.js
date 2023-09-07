@@ -58,7 +58,7 @@ const LikesComponent = ({ article_id }) => {
   return (
     <div className="text-center">
       {liked ? (
-        <Button variant="danger" >Dislike</Button>
+        <Button variant="danger" >Liked</Button>
       ) : (
         <Button variant="primary" onClick={handleLike}>Like</Button>
       )}

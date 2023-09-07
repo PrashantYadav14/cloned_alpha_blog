@@ -1,0 +1,63 @@
+/* articleprofile.css */
+
+.container {
+    background-color: #f8f9fa;
+    padding-top: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.card-title {
+    color: green;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.card-text {
+    color: #343a40;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.spinner {
+    text-align: center;
+}
+
+.view-all-comments {
+    background-color: #17a2b8;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.comment-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff; /* Changed background color */
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-content {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 8px;
+    padding: 10px; /* Added padding */
+}
+
+.comment-user {
+    font-size: 0.9rem;
+    color: #777;
+    text-align: right; /* Align user info to the right */
+    padding: 0 10px; /* Added padding */
+}
