@@ -15,10 +15,12 @@ Rails.application.routes.draw do
             get 'categories/:id', to: 'categories#show'
             delete '/users/:id', to: 'users#destroy_user'
             put '/users/:id', to: "users#update_user"
-        
           end
           resources :users
-          resources :articles
+          resources :articles do
+            resources :likes
+            resources :comments
+          end
           resources :categories, except: [:destroy]
         end
       end

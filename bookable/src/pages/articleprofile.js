@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Navbar, Card } from 'react-bootstrap';
+import LikesComponent from './likescomponent'; 
+import CommentsComponent from './commentscomponent';
+import { Container, Navbar, Card, Spinner, Alert, Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 function ArticleProfile() {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
     const API_URL = `http://localhost:3000/api/v1/articles/${id}`;
 
@@ -25,13 +27,13 @@ function ArticleProfile() {
 
   return (
     <Container style={{ backgroundColor: '#f8f9fa', paddingTop: '20px' }}>
-      <Navbar bg="dark" variant="dark" style={{ marginBottom: '20px' }}>
+      <Navbar bg="dark" variant="dark" className="mb-4">
         <Navbar.Brand className="mx-auto" style={{ color: '#17a2b8', fontSize: '1.5rem', fontWeight: 'bold' }}>
           Article Profile
         </Navbar.Brand>
       </Navbar>
       {loading ? ( 
-        <div className="text-center">Loading...</div>
+        <div className="text-center"><Spinner animation="border" variant="primary" /></div>
       ) : article ? (
         <Card className="mb-4 p-3 border" style={{ backgroundColor: '#f8f9fa' }}>
           <Card.Body>
@@ -41,10 +43,24 @@ function ArticleProfile() {
             <Card.Text className="mb-3" style={{ color: '#343a40', textAlign: 'center', fontSize: '1rem' }}>
               {article.description}
             </Card.Text>
+            {token && ( 
+              <Container className="d-flex justify-content-center"> 
+                <Col>
+                  <Row className="justify-content-center mb-4"> 
+             
+                    <LikesComponent article_id={id} />
+                  </Row>
+                  <Row className="justify-content-center mb-4">
+                    <CommentsComponent article_id={id} />
+                  </Row>
+                </Col>
+              </Container>
+            )}
+
           </Card.Body>
         </Card>
       ) : (
-        <div className="alert alert-danger mt-3">Article not found</div>
+        <Alert variant="danger" className="mt-3">Article not found</Alert>
       )}
     </Container>
   );
