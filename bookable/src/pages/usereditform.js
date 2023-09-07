@@ -37,6 +37,8 @@ function UserEditForm() {
     };
 
     fetchUserData();
+    
+
 
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
@@ -78,7 +80,7 @@ function UserEditForm() {
           },
         }
       );
-     
+  
       navigate('/users');
     } catch (error) {
       setError('Error updating user');

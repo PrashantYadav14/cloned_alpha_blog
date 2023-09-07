@@ -66,8 +66,8 @@ function Users() {
   const storedUser = JSON.parse(localStorage.getItem('user'));
 
   return (
-    <Container style={{ backgroundColor: '#f8f9fa', paddingTop: '20px' }}>
-      <Navbar bg="dark" variant="dark" style={{ marginBottom: '20px' }}>
+    <Container style={{ backgroundColor: 'rgba(0, 128, 0, 0)', paddingTop: '20px' }}>
+      <Navbar style={{ backgroundColor: '#194019' ,marginBottom: '20px' }}>
         <Navbar.Brand className="mx-auto" style={{ color: '#17a2b8', fontSize: '1.5rem', fontWeight: 'bold' }}>
           Alpha Blog Users
         </Navbar.Brand>

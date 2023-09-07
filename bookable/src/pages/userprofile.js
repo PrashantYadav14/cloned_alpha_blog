@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Container, Card, Alert } from 'react-bootstrap';
+import { useParams, Link } from 'react-router-dom';
+import { Container, Card, Alert, Button, Modal } from 'react-bootstrap';
 import './image.css'; // Import your CSS stylesheet
 
 function UserProfile() {
   const { id } = useParams();
   const [userData, setUserData] = useState(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [articleToDelete, setArticleToDelete] = useState(null);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/api/v1/users/${id}`)
@@ -18,6 +20,39 @@ function UserProfile() {
       });
   }, [id]);
 
+  const handleDeleteClick = (article) => {
+    setShowConfirmationModal(true);
+    setArticleToDelete(article);
+  };
+
+  const confirmDelete = () => {
+    const DELETE_URL = `http://localhost:3000/api/v1/articles/${articleToDelete.id}`;
+    const token = localStorage.getItem('token');
+
+    axios
+      .delete(DELETE_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        const updatedArticles = userData.articles.filter(article => article.id !== articleToDelete.id);
+        setUserData({ ...userData, articles: updatedArticles });
+        setShowConfirmationModal(false);
+        setArticleToDelete(null);
+      })
+      .catch((error) => {
+        console.error('Error deleting article:', error);
+      });
+  };
+
+  const cancelDelete = () => {
+    setShowConfirmationModal(false);
+    setArticleToDelete(null);
+  };
+
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  
   return (
     <div className="user-profile-bg">
       <Container className="mt-5 user-profile-container">
@@ -43,7 +78,39 @@ function UserProfile() {
                   <Card key={article.id} className="mb-3 border border-success">
                     <Card.Body>
                       <h5 className="text-article-title">{article.title}</h5>
-                      <p className="text-secondary">{article.description}</p>
+                      <div className="d-flex justify-content-center">
+                        <Link to={`/articles/${article.id}`}>
+                          <Button variant="success" className="mx-2">View</Button>
+                        </Link>
+                        {localStorage.getItem('token') && storedUser && (
+                            <div>
+                              {(storedUser.id === article.user_id ) && (
+                                <>
+                                  <Link to={`/articles/${article.id}/edit`}>
+                                    <Button variant="primary" className="mx-2">Edit</Button>
+                                  </Link>
+                                  <Button
+                                    variant="danger"
+                                    className="mx-2"
+                                    onClick={() => handleDeleteClick(article)}
+                                  >
+                                    Delete
+                                  </Button>
+                                </>
+                              )}
+                              {/* {storedUser.admin && (
+                                <Button
+                                  variant="danger"
+                                  className="mx-2"
+                                  onClick={() => handleDeleteClick(article)}
+                                >
+                                  Delete
+                                </Button>
+                              )} */}
+                            </div>
+                          )}
+
+                      </div>
                     </Card.Body>
                   </Card>
                 ))}
@@ -54,6 +121,21 @@ function UserProfile() {
           <Alert variant="danger" className="mt-3">User Data not found</Alert>
         )}
       </Container>
+
+      <Modal show={showConfirmationModal} onHide={cancelDelete}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this article?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
