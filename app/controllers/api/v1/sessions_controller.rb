@@ -5,7 +5,6 @@ class Api::V1::SessionsController < Devise::SessionsController
   before_action :configure_sign_in_params, only: [:create]
   respond_to :json
 
-  JWT_SECRET_KEY = '6B#Q&g8j$PzE5n@2mG*pW9sZrVw1yT7xU4'
 
   def create
     resource = User.find_for_database_authentication(email: params[:user][:email])

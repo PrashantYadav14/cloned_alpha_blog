@@ -2,7 +2,7 @@ class Api::V1::UsersController  <  Devise::RegistrationsController
   skip_before_action :verify_authenticity_token
   before_action :configure_sign_up_params, only: [:create]
   before_action :authenticate_user_with_jwt!, only: [:update_user, :destroy_user]
-  JWT_SECRET_KEY = '6B#Q&g8j$PzE5n@2mG*pW9sZrVw1yT7xU4'
+  
 
   def create
     user = User.new(sign_up_params)
@@ -72,20 +72,6 @@ class Api::V1::UsersController  <  Devise::RegistrationsController
     token
   end
   
-  def authenticate_user_with_jwt!
-    token = request.headers['Authorization']&.split(' ')&.last
-    begin
-      decoded_token = JWT.decode(token, JWT_SECRET_KEY, true, algorithm: 'HS256')
-      user_id = decoded_token[0]['user_id']
-      @current_user = User.find(user_id)
-    rescue JWT::DecodeError, ActiveRecord::RecordNotFound
-      render_unauthorized
-   
-    end
-  end
-
-  def render_unauthorized
-    render json: { error: 'Unauthorized' }, status: :unauthorized
-  end
+ 
 end
 

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Navbar, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import LikeButton from '../components/likebutton';
-import Comment from '../components/comment'; 
 
 function ArticleProfile() {
   const { id } = useParams();
@@ -43,12 +41,6 @@ function ArticleProfile() {
             <Card.Text className="mb-3" style={{ color: '#343a40', textAlign: 'center', fontSize: '1rem' }}>
               {article.description}
             </Card.Text>
-            <div className="text-center">
-              <LikeButton /> 
-            </div>
-            <div className="text-center" style={{ marginTop: '20px' }}> 
-              <Comment /> 
-            </div>
           </Card.Body>
         </Card>
       ) : (
