@@ -42,6 +42,7 @@ class App extends Component {
           <Route path="/categories/new" Component={NewCategoryForm} />
           <Route path="/categories/:categoryId/edit" Component={CategoryEditForm} />
           
+          
           <Route path="/articles"  Component={Articles} />
           <Route path="/articles/new"  Component={NewArticleForm} />
           <Route path="/articles/:id" element={<ArticleProfile />} />
