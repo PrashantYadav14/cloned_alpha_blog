@@ -16,7 +16,10 @@ Rails.application.routes.draw do
             delete '/users/:id', to: 'users#destroy_user'
             put '/users/:id', to: "users#update_user"
           end
-          resources :users
+          resources :users do
+              resources :friendships
+              resources :friend_requests 
+          end
           resources :articles do
             resources :likes
             resources :comments
