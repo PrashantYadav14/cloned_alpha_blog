@@ -19,6 +19,7 @@ Rails.application.routes.draw do
           resources :users do
               resources :friendships
               resources :friend_requests 
+              resources :messages
           end
           resources :articles do
             resources :likes
