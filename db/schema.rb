@@ -11,31 +11,31 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_09_12_084902) do
-  create_table "article_categories", force: :cascade do |t|
+  create_table "article_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "article_id"
     t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "articles", force: :cascade do |t|
+  create_table "articles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["user_id"], name: "index_articles_on_user_id"
   end
 
-  create_table "categories", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "comments", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "article_id", null: false
+  create_table "comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "article_id", null: false
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -43,7 +43,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_084902) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "friend_requests", force: :cascade do |t|
+  create_table "friend_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "sender_id"
     t.integer "receiver_id"
     t.boolean "accepted"
@@ -51,23 +51,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_084902) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "friendships", force: :cascade do |t|
+  create_table "friendships", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "friend_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "likes", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "article_id", null: false
+  create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "article_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["article_id"], name: "index_likes_on_article_id"
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username"
     t.string "email"
     t.datetime "created_at", null: false
