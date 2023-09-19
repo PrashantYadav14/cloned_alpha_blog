@@ -54,6 +54,21 @@ function ArticleProfile() {
             <Card.Title className="mb-3" style={{ color: 'green', textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
               {article.title}
             </Card.Title>
+          
+            <Card className="border mt-3">
+                <Card.Body>
+                  {article.image_url && ( 
+                    <div className="text-center mb-3">
+                      <img 
+                        src={`http://localhost:3000${article.image_url}`} 
+                        alt="Article" 
+                        style={{ maxWidth: '50%' }} 
+                      />
+                    </div>
+                  )}
+                </Card.Body>
+              </Card>
+
             <Card.Text className="mb-3" style={{ color: '#343a40', textAlign: 'center', fontSize: '1rem' }}>
               {article.description}
             </Card.Text>

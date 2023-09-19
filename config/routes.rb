@@ -17,6 +17,7 @@ Rails.application.routes.draw do
             put '/users/:id', to: "users#update_user"
           end
           resources :users do
+              get '/friends', to: 'friendships#show_all_friends'
               resources :friendships
               resources :friend_requests 
               resources :messages

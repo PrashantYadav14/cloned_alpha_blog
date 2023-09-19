@@ -21,10 +21,6 @@ class Api::V1::FriendshipsController < ApplicationController
       @friendships = user.friendships.includes(:friend)
       render json: @friendships, status: :ok
     end
-    # def index
-    #   @friendships = Friendship.all.includes(:user, :friend)
-    #   render json: @friendships, status: :ok
-    # end
 
     def destroy
       friendship = Friendship.find(params[:id])
@@ -36,5 +32,14 @@ class Api::V1::FriendshipsController < ApplicationController
         render json: { message: "Error removing friend" }, status: :unprocessable_entity
       end
     end
+
+
+    def show_all_friends
+      user = User.find(params[:user_id])
+      @friends = user.friends
+
+      render json: @friends
+    end
+    
 end
   

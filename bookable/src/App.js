@@ -15,6 +15,7 @@ import Signup from "./components/signup";
 
 import UserProfile from "./pages/userprofile";
 import UserEditForm from "./pages/usereditform";
+import UserFriends from "./pages/userfriends";
 
 import NewArticleForm from "./pages/newarticleform";
 import NewCategoryForm from "./pages/newcategoryform";
@@ -24,6 +25,7 @@ import ArticleEditForm from "./pages/articleeditform";
 
 import CategoryProfile from  "./pages/categoryprofile";
 import CategoryEditForm from "./pages/categoryeditform";
+import Message from "./pages/message";
 
 class App extends Component {
   render() {
@@ -34,9 +36,14 @@ class App extends Component {
           <Route path="/" Component={Home} />
           <Route path="/login" Component={Login} />
           <Route path="/signup" Component={Signup} />
+        
+          
           <Route path="/users" Component={Users} />
           <Route path="/users/:id" Component={UserProfile} />
-      
+          <Route path="/users/:id/friends" Component={UserFriends} />
+          <Route path="/users/:userId/edit" Component={UserEditForm} />
+          <Route path='/users/:userId/friends/message/:friendId' Component={Message} />
+ 
           <Route path="/categories" Component={Categories} />
           <Route path="/categories/:id" Component={CategoryProfile} />
           <Route path="/categories/new" Component={NewCategoryForm} />
@@ -47,9 +54,7 @@ class App extends Component {
           <Route path="/articles/new"  Component={NewArticleForm} />
           <Route path="/articles/:id" element={<ArticleProfile />} />
           <Route path="/articles/:articleId/edit" Component={ArticleEditForm} />
-          
 
-          <Route path="/users/:userId/edit" Component={UserEditForm} />
           
         </Routes>
         <Footer />

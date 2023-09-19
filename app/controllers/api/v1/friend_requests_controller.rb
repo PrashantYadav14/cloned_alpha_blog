@@ -1,4 +1,5 @@
 class Api::V1::FriendRequestsController < ApplicationController
+    
     before_action :authenticate_user_with_jwt!, only: [:create, :accept, :destroy]
     skip_before_action :verify_authenticity_token
     

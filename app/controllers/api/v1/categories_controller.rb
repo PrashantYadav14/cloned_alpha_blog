@@ -1,8 +1,8 @@
 class Api::V1::CategoriesController < ApplicationController
+
     skip_before_action :verify_authenticity_token
     before_action :authenticate_user_with_jwt!, only: [:create, :update]
     
-
     def new
       @category = Category.new
     end
@@ -50,7 +50,6 @@ class Api::V1::CategoriesController < ApplicationController
   
     private
      
-
     def category_params
       params.require(:category).permit(:name)
     end

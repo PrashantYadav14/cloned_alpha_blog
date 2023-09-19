@@ -2,7 +2,6 @@ class Api::V1::UsersController  <  Devise::RegistrationsController
   skip_before_action :verify_authenticity_token
   before_action :configure_sign_up_params, only: [:create]
   before_action :authenticate_user_with_jwt!, only: [:update_user, :destroy_user]
-  
 
   def create
     user = User.new(sign_up_params)
