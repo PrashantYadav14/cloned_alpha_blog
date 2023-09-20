@@ -1,4 +1,5 @@
 class Api::V1::CommentsController < ApplicationController
+
     before_action :authenticate_user_with_jwt!, only: [:create, :destroy]
     skip_before_action :verify_authenticity_token
   
@@ -17,6 +18,7 @@ class Api::V1::CommentsController < ApplicationController
         render json: { error: "Unable to comment on the article" }, status: :unprocessable_entity
       end
     end
+    
     def index
         @article = Article.find(params[:article_id])
         @comments = @article.comments.includes(:user)

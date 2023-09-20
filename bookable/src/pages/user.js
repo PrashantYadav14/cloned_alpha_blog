@@ -191,7 +191,7 @@ function Users() {
                     <Button variant="danger" className="mx-2" onClick={() => {
                       const friendship = userFriendships.find(friendship => friendship.friend_id === user.id);
                       if (friendship) {
-                        removeFriend(friendship.id);
+                        removeFriend(friendship.friend_id);
                       }
                     }} >Remove Friend</Button>
                   ) : (

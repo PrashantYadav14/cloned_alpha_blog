@@ -10,12 +10,18 @@ class Api::V1::ArticlesController < ApplicationController
   end
 
   def show
+    @article = @article.as_json(methods: [:image_url])
     render json: @article
   end
 
+  
   def create
     article = @current_user.articles.build(article_params)
     category_ids = params[:article][:category_ids] || [] 
+
+    if params[:article][:image] 
+      article.image.attach(params[:article][:image]) 
+    end
 
     if article.save
       article.categories << Category.where(id: category_ids) 
@@ -37,6 +43,7 @@ class Api::V1::ArticlesController < ApplicationController
 
   def destroy
     if @article.user == @current_user || @current_user.admin?
+      @article.image.purge if @article.image.attached?
       @article.destroy
       head :no_content
     else
@@ -51,7 +58,8 @@ class Api::V1::ArticlesController < ApplicationController
   end
 
   def article_params
-    params.require(:article).permit(:title, :description, :category_id)
+    params.require(:article).permit(:title, :description, :category_ids, :image)
   end
   
 end
+

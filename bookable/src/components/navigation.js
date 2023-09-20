@@ -30,7 +30,11 @@ function Navigation() {
           <Nav.Link as={Link} to="/users" className="nav-link">
             Bloggers
           </Nav.Link>
-
+          
+          {token && (<Nav.Link as={Link} to={`users/${user.id}/friends`} className="nav-link">
+            Friends
+          </Nav.Link>
+          )}
           <NavDropdown title="Articles" id="navbarScrollingDropdown" className="nav-dropdown">
             {token && (
               <NavDropdown.Item as={Link} to="/articles/new" className="dropdown-item create-article-link">
