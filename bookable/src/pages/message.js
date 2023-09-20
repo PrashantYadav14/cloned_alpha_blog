@@ -151,19 +151,23 @@ function Message() {
             {messages.map((message) => (
                 <div key={message.id} className={message.sender_id === storedUser.id ? 'message sent' : 'message received'}>
                     <div className="message-content">
+                      <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <p>
-                            {message.sender_id === storedUser.id ? 'You' : friendName}: {message.content}
-                            <Dropdown>
-                            <Dropdown.Toggle variant="light"></Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => openEditModal(message)}>Edit</Dropdown.Item>
-                                <Dropdown.Item onClick={() => handleDeleteMessage(message.id)}>Delete</Dropdown.Item>
-                            </Dropdown.Menu>
-                            </Dropdown>
+                          {message.sender_id === storedUser.id ? 'You' : friendName}: {message.content}
+                            {(message.sender_id === storedUser.id) && <Dropdown>
+                                <Dropdown.Toggle variant="light"></Dropdown.Toggle>
+                                  <Dropdown.Menu>
+                                      <Dropdown.Item onClick={() => openEditModal(message)}>Edit</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => handleDeleteMessage(message.id)}>Delete</Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>}
                         </p>
+                      </div>
+                      <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <small className="text-muted">{formatTimestamp(message.created_at)}</small>
                         {message.sender_id === storedUser.id && !message.read && <span className="tick-icon">✓</span>}
                         {message.sender_id === storedUser.id && message.read && <span className="tick-icon">✓✓</span>}
+                      </div>
                     </div>
                 </div>
             ))}

@@ -23,8 +23,10 @@ class Api::V1::FriendshipsController < ApplicationController
     end
 
     def destroy
-      friendship = Friendship.find(params[:id])
-      reverse_friendship = Friendship.find_by(user_id: friendship.friend_id, friend_id: friendship.user_id)
+      friendship = Friendship.find_by(user_id: params[:user_id], friend_id: params[:id])
+      reverse_friendship = Friendship.find_by(user_id: params[:id], friend_id: params[:user_id])
+      # friendship = Friendship.find(params[:id])
+      # reverse_friendship = Friendship.find_by(user_id: friendship.friend_id, friend_id: friendship.user_id)
       if friendship.destroy
         reverse_friendship&.destroy  
         render json: { message: "Friend removed successfully" }, status: :ok

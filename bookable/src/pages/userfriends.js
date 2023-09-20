@@ -38,7 +38,8 @@ function UserFriends() {
   };
 
   const confirmDelete = () => {
-    const DELETE_FRIEND_URL = `http://localhost:3000/api/v1/users/${friendToDelete.id}/friendships`;
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const DELETE_FRIEND_URL = `http://localhost:3000/api/v1/users/${storedUser.id}/friendships/${friendToDelete.id}`;
     const token = localStorage.getItem('token');
 
     axios
