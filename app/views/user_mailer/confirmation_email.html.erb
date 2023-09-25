@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Confirmation Email</title>
+  </head>
+  <body>
+    <h1>Confirmation Email</h1>
+    <p>Welcome, <%= @user.username %>!</p>
+    <p>Please click the link below to confirm your email address:</p>
+    <%= link_to 'Confirm Email', confirm_email_url(@user.confirmation_token) %>
+  </body>
+</html>

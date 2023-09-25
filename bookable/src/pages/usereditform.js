@@ -97,24 +97,25 @@ function UserEditForm() {
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="username">
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            type="text"
-            name="username"
-            value={editedUser.username}
-            onChange={handleChange}
-          />
-        </Form.Group>
         <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            value={editedUser.email}
-            onChange={handleChange}
-          />
-        </Form.Group>
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              value={editedUser.email}
+              onChange={handleChange}
+              readOnly
+            />
+          </Form.Group>
+          <Form.Group controlId="username">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              name="username"
+              value={editedUser.username}
+              onChange={handleChange}
+            />
+          </Form.Group>
        
         <Button variant="primary" type="submit">
           Save Changes

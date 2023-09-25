@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
   before_save { self.email = email.downcase }
   has_many :articles, dependent: :destroy
   has_many :likes, dependent: :destroy

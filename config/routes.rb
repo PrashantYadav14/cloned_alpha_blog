@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: 'api/v1/sessions', registrations: 'api/v1/users'}
       namespace :api do
         namespace :v1 do
-        
+          require 'sidekiq/web'
+          mount Sidekiq::Web => '/sidekiq'
           devise_scope :user do
             get '/login', to: 'sessions#new'
             post '/login', to: 'sessions#create'
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
             get 'categories/:id', to: 'categories#show'
             delete '/users/:id', to: 'users#destroy_user'
             put '/users/:id', to: "users#update_user"
+            
           end
           resources :users do
               get '/friends', to: 'friendships#show_all_friends'

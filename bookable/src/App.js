@@ -27,8 +27,10 @@ import CategoryProfile from  "./pages/categoryprofile";
 import CategoryEditForm from "./pages/categoryeditform";
 import Message from "./pages/message";
 
-class App extends Component {
-  render() {
+import ConfirmationPage from "./pages/confirmationpage";
+
+
+function App() {
     return (
       <BrowserRouter>
        <Navigation />
@@ -36,8 +38,9 @@ class App extends Component {
           <Route path="/" Component={Home} />
           <Route path="/login" Component={Login} />
           <Route path="/signup" Component={Signup} />
-        
-          
+
+          <Route path="/users/confirmation/:confirmation_token" Component={ConfirmationPage} />
+
           <Route path="/users" Component={Users} />
           <Route path="/users/:id" Component={UserProfile} />
           <Route path="/users/:id/friends" Component={UserFriends} />
@@ -57,9 +60,9 @@ class App extends Component {
 
           
         </Routes>
-        <Footer />
+       <Footer />
       </BrowserRouter>
     );
   }
-}
+
 export default App;
