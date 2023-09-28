@@ -14,7 +14,6 @@ class Api::V1::ArticlesController < ApplicationController
     render json: @article
   end
 
-  
   def create
     article = @current_user.articles.build(article_params)
     category_ids = params[:article][:category_ids] || [] 

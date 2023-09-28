@@ -1,5 +1,7 @@
 
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   devise_for :users, controllers: { sessions: 'api/v1/sessions', registrations: 'api/v1/users'}
       namespace :api do
         namespace :v1 do
@@ -16,7 +18,7 @@ Rails.application.routes.draw do
             get 'categories/:id', to: 'categories#show'
             delete '/users/:id', to: 'users#destroy_user'
             put '/users/:id', to: "users#update_user"
-            
+            post '/users/forgotpassword', to: "sessions#forgot_password"
           end
           resources :users do
               get '/friends', to: 'friendships#show_all_friends'
@@ -47,6 +49,8 @@ Rails.application.routes.draw do
 end
 
 # Rails.application.routes.draw do
+  # devise_for :admin_users, ActiveAdmin::Devise.config
+  # ActiveAdmin.routes(self)
 #   devise_for :users, controllers: { sessions: 'api/v1/sessions', registrations: 'api/v1/users'}
 #       namespace :api do
 #         namespace :v1 do

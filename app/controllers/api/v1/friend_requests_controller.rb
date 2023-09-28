@@ -24,7 +24,7 @@ class Api::V1::FriendRequestsController < ApplicationController
         @friend_request.accepted = false
         if @friend_request.save
           FriendRequestMailer.friend_request_sent(@current_user, receiver).deliver_now
-          SendFriendRequestReminderJob.set(wait: 3.minutes).perform_later(@friend_request.id)
+          SendFriendRequestReminderJob.set(wait: 2.minutes).perform_later(@friend_request.id)
           
           render json: { message: "Friend request sent" }, status: :created
         else

@@ -28,6 +28,7 @@ import CategoryEditForm from "./pages/categoryeditform";
 import Message from "./pages/message";
 
 import ConfirmationPage from "./pages/confirmationpage";
+import ForgotPassword from "./pages/forgotpassword";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/signup" Component={Signup} />
 
           <Route path="/users/confirmation/:confirmation_token" Component={ConfirmationPage} />
+          <Route path='/forgot-password' Component={ForgotPassword} />
 
           <Route path="/users" Component={Users} />
           <Route path="/users/:id" Component={UserProfile} />

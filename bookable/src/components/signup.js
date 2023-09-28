@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, Form, Modal } from 'react-bootstrap';
-import Alert from 'react-bootstrap/Alert';
 import './signup.css';
 
 function Signup() {
@@ -11,12 +10,14 @@ function Signup() {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setError('');
+
     if (!username || !email || !password) {
+      setShowModal(true);
       setError('All fields are required');
       return;
     }
@@ -26,25 +27,17 @@ function Signup() {
         user: { username, email, password },
       });
       if (response.data.message === 'Confirmation email sent') {
-        handleShowModal(); 
+        setShowModal(true);
+        setError('Email Confirmation Sent. Please confirm to activate your account.'); 
       }
     } catch (error) {
+      setShowModal(true);
       setError('Error signing up');
     }
   };
 
-  const handleCloseAlert = () => {
-    setError('');
-  };
-
   return (
     <div className="signup-page">
-      {error && (
-        <Alert variant="danger" className="mt-3" onClose={handleCloseAlert} dismissible>
-          {error}
-        </Alert>
-      )}
-
       <Form onSubmit={handleSignup} className="signup-form">
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
@@ -83,10 +76,10 @@ function Signup() {
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Email Confirmation Sent</Modal.Title>
+          <Modal.Title>Confirmation Email Sent</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          A confirmation email has been sent. Please confirm to activate your account.
+          {error}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
@@ -99,6 +92,7 @@ function Signup() {
 }
 
 export default Signup;
+
 
 
 // import React, { useState } from 'react';
