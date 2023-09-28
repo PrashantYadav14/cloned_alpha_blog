@@ -16,7 +16,7 @@ function ForgotPassword() {
       });
 
       setMessage(response.data.message);
-      setShowModal(true); // Show the modal after successful form submission
+      setShowModal(true); 
     } catch (error) {
       setMessage('Something went wrong. Please try again later.');
     }

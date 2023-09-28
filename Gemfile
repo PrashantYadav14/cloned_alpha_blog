@@ -14,6 +14,8 @@ gem 'devise_token_auth'
 gem 'devise-jwt'
 gem 'sidekiq'
 gem 'activeadmin'
+gem 'cancancan'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
