@@ -18,7 +18,17 @@ class Api::V1::SessionsController < Devise::SessionsController
       invalid_login_attempt
     end
   end
-
+  
+  def forgot_password
+    user = User.find_by(email: params[:user][:email])
+    if user
+      user.send_reset_password_instructions
+      render json: { message: 'Password reset instructions sent successfully' }
+    else
+      render json: { error: 'Email not found' }, status: :not_found
+    end
+  end
+ 
   private
 
   def invalid_login_attempt

@@ -1,3 +1,69 @@
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { Container, Navbar, Card, Button, Modal } from 'react-bootstrap';
+// import { Link } from 'react-router-dom';
+
+// function Articles() {
+//   const [articles, setArticles] = useState([]);
+//   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+//   const [articleToDelete, setArticleToDelete] = useState(null);
+
+//   useEffect(() => {
+//     let mounted = true;
+//     const API_URL = "http://localhost:3000/api/v1/articles";
+//     const token = localStorage.getItem('token'); 
+//     axios.get(API_URL, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     }).then((response) => {
+//       if (mounted) {
+//         setArticles(response.data);
+//       }
+//     });
+
+//     return () => {
+//       mounted = false; 
+//     };
+//   }, []);
+
+//   const handleDeleteClick = (article) => {
+    
+//     setShowConfirmationModal(true);
+//     setArticleToDelete(article);
+//   };
+
+//   const confirmDelete = () => {
+   
+//     const DELETE_URL = `http://localhost:3000/api/v1/articles/${articleToDelete.id}`;
+//     const token = localStorage.getItem('token');
+//     const storedUser = JSON.parse(localStorage.getItem('user'));
+
+//     axios
+//       .delete(DELETE_URL, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       .then(() => {
+
+//         setArticles((prevArticles) => prevArticles.filter((article) => article.id !== articleToDelete.id));
+//         setShowConfirmationModal(false);
+//         setArticleToDelete(null);
+//       })
+//       .catch((error) => {
+//         console.error('Error deleting article:', error);
+       
+//       });
+//   };
+
+//   const cancelDelete = () => {
+//     setShowConfirmationModal(false);
+//     setArticleToDelete(null);
+//   };
+
+//   const token = localStorage.getItem('token');
+//   const storedUser = JSON.parse(localStorage.getItem('user'));
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Navbar, Card, Button, Modal } from 'react-bootstrap';
@@ -7,13 +73,25 @@ function Articles() {
   const [articles, setArticles] = useState([]);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [articleToDelete, setArticleToDelete] = useState(null);
+  const [unauthorizedError, setUnauthorizedError] = useState(false);
 
   useEffect(() => {
     let mounted = true;
     const API_URL = "http://localhost:3000/api/v1/articles";
-    axios.get(API_URL).then((response) => {
+    const token = localStorage.getItem('token'); 
+    axios.get(API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
       if (mounted) {
         setArticles(response.data);
+      }
+    }).catch(error => {
+      if (error.response && error.response.status === 401) {
+        setUnauthorizedError(true);
+      } else {
+        console.error('Error fetching articles:', error);
       }
     });
 
@@ -23,16 +101,13 @@ function Articles() {
   }, []);
 
   const handleDeleteClick = (article) => {
-    
     setShowConfirmationModal(true);
     setArticleToDelete(article);
   };
 
   const confirmDelete = () => {
-   
     const DELETE_URL = `http://localhost:3000/api/v1/articles/${articleToDelete.id}`;
     const token = localStorage.getItem('token');
-    const storedUser = JSON.parse(localStorage.getItem('user'));
 
     axios
       .delete(DELETE_URL, {
@@ -41,14 +116,12 @@ function Articles() {
         },
       })
       .then(() => {
-
         setArticles((prevArticles) => prevArticles.filter((article) => article.id !== articleToDelete.id));
         setShowConfirmationModal(false);
         setArticleToDelete(null);
       })
       .catch((error) => {
         console.error('Error deleting article:', error);
-       
       });
   };
 
@@ -62,6 +135,21 @@ function Articles() {
 
   return (
     <Container style={{ backgroundColor: 'rgba(0, 128, 0, 0)', paddingTop: '20px' }}>
+       {unauthorizedError && (
+        <Modal show={unauthorizedError} onHide={() => setUnauthorizedError(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Unauthorized Access</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>You are not authorized to view this content. Please log in.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setUnauthorizedError(false)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
       <Navbar style={{backgroundColor:'#194019', marginBottom: '20px' }}>
         <Navbar.Brand className="mx-auto" style={{ color: '#17a2b8', fontSize: '1.5rem', fontWeight: 'bold' }}>
           Alpha Blog Articles

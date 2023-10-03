@@ -10,13 +10,27 @@ Rails.application.configure do
 
   # Do not eager load code on boot.
   config.eager_load = false
+  
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000}
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.gmail.com',
+    port: 587,
+    domain: 'gmail.com',
+    user_name: 'demoid873@gmail.com',
+    password: 'banmphkbeypbnfdk',
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
+
 
   # Show full error reports.
   config.consider_all_requests_local = true
 
   # Enable server timing
   config.server_timing = true
-
+  
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?

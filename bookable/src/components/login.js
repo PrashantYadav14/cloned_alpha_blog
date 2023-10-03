@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useNavigate } from 'react-router-dom';
-import Alert from 'react-bootstrap/Alert';
+import Modal from 'react-bootstrap/Modal';
+import { useNavigate, Link } from 'react-router-dom';
 import './signup.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -19,22 +20,20 @@ function Login() {
         user: { email, password }
       });
       if (response.data.message === 'Logged in successfully') {
-        
         localStorage.setItem('user', JSON.stringify(response.data.user));
         localStorage.setItem('token', response.data.token);
-
-       
         const userId = response.data.user.id;
         const profileUrl = `/users/${userId}`;
         navigate(profileUrl);
       }
     } catch (error) {
       setLoginError(true);
+      setShowModal(true);
     }
   };
 
-  const handleCloseAlert = () => {
-    setLoginError(false);
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -60,21 +59,36 @@ function Login() {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" className="signup-button">
-          Log In
-        </Button>
+        <div>
+          <Button variant="primary" type="submit" className="signup-button">
+            Log In
+          </Button>
+        </div>
+        <Link to="/forgot-password" className="forgot-password-link">
+          Forgot Password?
+        </Link>
       </Form>
-      
-      {loginError && (
-        <Alert variant="danger" className="mt-3" onClose={handleCloseAlert} dismissible>
-          Invalid email or password
-        </Alert>
-      )}
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Login Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Invalid email or password. Please try again.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
 
 export default Login;
+
+
 
 // import React, { useState } from 'react';
 // import axios from 'axios';

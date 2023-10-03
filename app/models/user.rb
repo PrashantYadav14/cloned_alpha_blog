@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
   before_save { self.email = email.downcase }
   has_many :articles, dependent: :destroy
   has_many :likes, dependent: :destroy
@@ -17,4 +17,12 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true, length: {minimum: 3, maximum: 25}
   validates :email, presence: true, uniqueness: { case_sensitive: false }, length: {maximum: 100}
   #has_secure_password
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[username email] 
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["articles", "comments", "friends", "friendships", "likes", "received_friend_requests", "received_messages", "sent_friend_requests", "sent_messages"]
+  end
 end

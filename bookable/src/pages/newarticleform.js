@@ -155,32 +155,32 @@ export default NewArticleForm;
 //     fetchCategories();
 //   }, []);
 
-//   const handleCreateArticle = async () => {
-//     try {
-//       const token = localStorage.getItem('token');
-//       const response = await axios.post(
-//         'http://localhost:3000/api/v1/articles',
-//         {
-//           article: {
-//             title,
-//             description,
-//             category_ids: categoryIds,
-//           },
-//         },
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
+  // const handleCreateArticle = async () => {
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     const response = await axios.post(
+  //       'http://localhost:3000/api/v1/articles',
+  //       {
+  //         article: {
+  //           title,
+  //           description,
+  //           category_ids: categoryIds,
+  //         },
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
 
-//       if (response.data.message === 'Article created successfully') {
-//         navigate('/articles');
-//       }
-//     } catch (error) {
-//       setError('Error creating the article. Please try again.');
-//     }
-//   };
+  //     if (response.data.message === 'Article created successfully') {
+  //       navigate('/articles');
+  //     }
+  //   } catch (error) {
+  //     setError('Error creating the article. Please try again.');
+  //   }
+  // };
 
 //   const dismissError = () => {
 //     setError(null);

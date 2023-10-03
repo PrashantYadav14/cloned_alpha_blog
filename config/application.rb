@@ -11,6 +11,13 @@ module AlphaBlog
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
     config.action_controller.default_protect_from_forgery = true
+    config.active_job.queue_adapter = :sidekiq
+    config.assets.enabled = true
+    config.to_prepare do
+      ActiveStorage::Attachment.include ActiveStorageAttachmentConcern
+    end
+    
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

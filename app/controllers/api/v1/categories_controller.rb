@@ -8,16 +8,17 @@ class Api::V1::CategoriesController < ApplicationController
     end
 
     def create
+      authorize! :manage, Category
       @category = Category.new(category_params)
-      if @current_user.admin?
+      # if @current_user.admin?
         if @category.save
           render json: { message: 'Category created successfully', category: @category }, status: :created
         else
           render json: @category.errors, status: :unprocessable_entity
         end
-      else
-        render json: { error: 'You do not have permission to create a category' }, status: :forbidden
-      end
+      # else
+      #   render json: { error: 'You do not have permission to create a category' }, status: :forbidden
+      # end
     end
 
     def update

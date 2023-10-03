@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Form, Button, Alert, CloseButton } from 'react-bootstrap';
+import { Form, Button, Alert, CloseButton, Modal } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function ArticleEditForm() {
@@ -56,10 +56,10 @@ function ArticleEditForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!user || user.id !== article.user_id) {
-      setError('You are not authorized to edit this article.');
-      return;
-    }
+    // if (!user || user.id !== article.user_id) {
+    //   setError('You are not authorized to edit this article.');
+    //   return;
+    // }
 
     const { title, description } = article;
     const API_URL = `http://localhost:3000/api/v1/articles/${articleId}`;
@@ -83,7 +83,7 @@ function ArticleEditForm() {
         navigate('/articles');
       })
       .catch(() => {
-        setError('Error updating article');
+        setError('Error updating article. You may not be authorized!');
       });
   };
 
@@ -91,10 +91,19 @@ function ArticleEditForm() {
     <div className="article-form"> 
       <h2>Edit Article</h2>
       {error && (
-        <Alert variant="danger">
-          {error}
-          <CloseButton onClick={handleCloseError} />
-        </Alert>
+        <Modal show={error} onHide={() => setError(null)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Error Updating Article</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {error}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setError(null)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="title">

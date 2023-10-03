@@ -6,9 +6,12 @@ class Api::V1::UsersController  <  Devise::RegistrationsController
   def create
     user = User.new(sign_up_params)
     if user.save
-      sign_in(user)
-      token = generate_jwt_token(user)
-      render json: { message: 'Signed up successfully', user: user, token: token }
+      # UserMailer.confirmation_email(user).deliver_now
+      # sign_in(user)
+      # token = generate_jwt_token(user)
+      # render json: { message: 'Signed up successfully', user: user, token: token }
+      user.send_confirmation_instructions 
+      render json: { message: 'Confirmation email sent', user: user }
     else
       render json: { status: :unprocessable_entity, errors: user.errors.full_messages }
     end

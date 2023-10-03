@@ -23,9 +23,12 @@ class Api::V1::FriendRequestsController < ApplicationController
         @friend_request = current_user.sent_friend_requests.build(receiver: receiver)
         @friend_request.accepted = false
         if @friend_request.save
-        render json: { message: "Friend request sent" }, status: :created
+          FriendRequestMailer.friend_request_sent(@current_user, receiver).deliver_now
+          SendFriendRequestReminderJob.set(wait: 2.minutes).perform_later(@friend_request.id)
+          
+          render json: { message: "Friend request sent" }, status: :created
         else
-        render json: { error: "Failed to send friend request" }, status: :unprocessable_entity
+          render json: { error: "Failed to send friend request" }, status: :unprocessable_entity
         end
     end
   

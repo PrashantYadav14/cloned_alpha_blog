@@ -9,10 +9,11 @@ function Navigation() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
   const token = localStorage.getItem('token');
-  const [username, setUsername] = useState(null); // Initialize with null
+  const [username, setUsername] = useState(null); 
 
   
   const handleLogout = () => {
+    
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/login');
