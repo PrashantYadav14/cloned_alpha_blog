@@ -27,6 +27,7 @@ class Api::V1::FriendshipsController < ApplicationController
       reverse_friendship = Friendship.find_by(user_id: params[:id], friend_id: params[:user_id])
       if friendship.destroy
         reverse_friendship&.destroy  
+        Message.where(sender_id: [params[:user_id], params[:id]], receiver_id: [params[:user_id], params[:id]]).destroy_all
         render json: { message: "Friend removed successfully" }, status: :ok
       else
         render json: { message: "Error removing friend" }, status: :unprocessable_entity

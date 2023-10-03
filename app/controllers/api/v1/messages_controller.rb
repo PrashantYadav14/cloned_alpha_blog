@@ -16,6 +16,7 @@ class Api::V1::MessagesController < ApplicationController
       @message = Message.new(message_params)
       @message.read = false
       if @message.save
+        ActionCable.server.broadcast("chat_#{params[:receiver_id]}#{params[:sender_id]}", @message)
         render json: @message, status: :created
       else
         render json: { error: 'Unable to create message' }, status: :unprocessable_entity
@@ -26,6 +27,7 @@ class Api::V1::MessagesController < ApplicationController
         @message = Message.find(params[:id])
         if @message.sender_id==@current_user.id
           if @message.update(message_params)
+            ActionCable.server.broadcast("chat_#{@message.receiver_id}#{@message.sender_id}", @message)
             render json: @message, status: :ok
           else
             render json: { error: 'Unable to update message' }, status: :unprocessable_entity
@@ -37,8 +39,12 @@ class Api::V1::MessagesController < ApplicationController
   
     def destroy
       @message = Message.find(params[:id])
+      sender_id=@message.sender_id
+      receiver_id=@message.receiver_id
       if @message.sender_id == @current_user.id
         @message.destroy
+        ActionCable.server.broadcast("chat_#{sender_id}#{receiver_id}", { content: "deleted", id: @message.id })
+        ActionCable.server.broadcast("chat_#{receiver_id}#{sender_id}", { content: "deleted", id: @message.id })
         head :no_content
       else
         render json: { error: 'Unauthorized'}, status: :unauthorized

@@ -5,4 +5,5 @@ class Message < ApplicationRecord
     def self.ransackable_attributes(auth_object = nil)
         ["content", "created_at", "id", "read", "receiver_id", "sender_id", "updated_at"]
     end
+
 end

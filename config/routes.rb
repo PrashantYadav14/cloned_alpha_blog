@@ -1,5 +1,6 @@
 
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users, controllers: { sessions: 'api/v1/sessions', registrations: 'api/v1/users'}
@@ -7,6 +8,7 @@ Rails.application.routes.draw do
         namespace :v1 do
           require 'sidekiq/web'
           mount Sidekiq::Web => '/sidekiq'
+
           devise_scope :user do
             get '/login', to: 'sessions#new'
             post '/login', to: 'sessions#create'
