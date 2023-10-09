@@ -1,6 +1,6 @@
 class Api::V1::MessagesController < ApplicationController
     skip_before_action :verify_authenticity_token
-    before_action :authenticate_user_with_jwt!, only: [:create, :update, :destroy]
+    before_action :authenticate_user_with_jwt!, only: [:create, :update, :destroy, :show]
 
   
     def show
@@ -8,6 +8,9 @@ class Api::V1::MessagesController < ApplicationController
       receiver_id = params[:id]
       @messages = Message.where(sender_id: [sender_id, receiver_id], receiver_id: [sender_id, receiver_id]).order(created_at: :asc)
       @messages.where(sender_id: receiver_id, receiver_id: sender_id).update_all(read: true)
+     
+      ActionCable.server.broadcast("chat_#{params[:receiver_id]}#{params[:sender_id]}", { content: "read", msg: @messages })
+     
       render json: @messages
     end
       
