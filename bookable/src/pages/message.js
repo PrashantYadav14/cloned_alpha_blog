@@ -5,7 +5,6 @@ import { Container, Row, Col, InputGroup, FormControl, Button, Dropdown, Modal }
 import './message.css';
 import ActionCable from 'actioncable'
 function Message() {
-  const [focusCount, setFocusCount] = useState(0);
   const { userId, friendId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -17,7 +16,8 @@ function Message() {
   const messageContainerRef = useRef(null);
   const [emojiList, setEmojiList] = useState([
     '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊']);
-    
+
+
     
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -52,7 +52,7 @@ function Message() {
         console.error('Error fetching messages:', error);
       });
     }
-  }, [userId, friendId, focusCount]);
+  }, [userId, friendId]);
 
   useEffect(() => {
     messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
@@ -95,24 +95,20 @@ function Message() {
         },
         {
           received: (message) => {
-           
             setMessages(prevMessages => {
-              if (message.content === "read"){
-                  return message.msg;
+          
+              if (message.content === 'deleted') {
+                return prevMessages.filter(m => m.id !== message.id);
               }
-              else{
-                  if (message.content === 'deleted') {
-                    return prevMessages.filter(m => m.id !== message.id);
-                  }
-                  const messageIndex = prevMessages.findIndex(m => m.id === message.id);
-      
-                  if (messageIndex !== -1) {
-                    prevMessages[messageIndex] = message;
-                    return [...prevMessages];
-                  } else {
-                    return [...prevMessages, message];
-                  }
-               }
+  
+              const messageIndex = prevMessages.findIndex(m => m.id === message.id);
+  
+              if (messageIndex !== -1) {
+                prevMessages[messageIndex] = message;
+                return [...prevMessages];
+              } else {
+                return [...prevMessages, message];
+              }
             });
           }
           
@@ -124,9 +120,6 @@ function Message() {
       };
     }
   }, [storedUser.id, friendId]);
-
-
-
 
   const openEditModal = (message) => {
     setMessageToEdit(message);
@@ -232,9 +225,6 @@ function Message() {
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onFocus={() => {
-                setFocusCount(prevCount => prevCount + 1);
-              }}
               placeholder="Type a message..."
             />
             <Button variant="primary" onClick={handleSendMessage}>Send</Button>
